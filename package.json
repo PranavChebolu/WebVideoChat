@@ -1,0 +1,22 @@
+{
+  "name": "webvideochat",
+  "version": "1.0.0",
+  "description": "- a recreation of the zoom's web version",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PranavChebolu/WebVideoChat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PranavChebolu/WebVideoChat/issues"
+  },
+  "homepage": "https://github.com/PranavChebolu/WebVideoChat#readme",
+  "dependencies": {
+    "create-react-app": "^5.0.0"
+  }
+}
