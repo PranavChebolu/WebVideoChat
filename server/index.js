@@ -27,26 +27,29 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-});
+// io.on('connection', (socket) => {
+//     console.log('a user connected');
+//     socket.on('disconnect', () => {
+//         console.log('user disconnected');
+//     });
+// });
 
 app.post("/test", (req, res) => {
     console.log(req.body.hello)
     res.send({ "hello": "to you" })
 })
 
-io.on('connection', (socket) => {
+/*io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         console.log('message: ' + msg);
     });
 });
+*/
 
 io.on('connection', (socket) => {
+    console.log("user connected ", socket.id);
     socket.on('chat message', (msg) => {
+        console.log("sending message", msg.message);
         io.emit('chat message', msg);
     });
 });

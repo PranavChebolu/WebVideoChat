@@ -1,29 +1,21 @@
 import logo from './logo.svg';
 import './App.css';
 import socketIOClient from "socket.io-client";
-import {v4 as uuidV4} from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 import React from "react";
 
 function App() {
   const [socketHandler, setSocketHandler] = React.useState(undefined);
   const [message, setMessage] = React.useState("");
 
-  const [chatMessages, setChatMessages] = React.useState([
-    {
-      id: 'someId1',
-      user: {
-        name: 'Bob'
-      },
-      message: 'sampleMessage'
-    }
-  ]);
+  const [chatMessages, setChatMessages] = React.useState([]);
 
   const [user, setUser] = React.useState(undefined);
 
   // use effect hook - runs once like a constructor
   React.useEffect(() => {
     // connection to socket server
-    const socket = socketIOClient('http://localhost:8081', {secure: false});
+    const socket = socketIOClient('http://localhost:8081', { secure: false });
 
     // listen for chat messages
     socket.on('chat message', (newChatMessage) => {
@@ -81,18 +73,18 @@ function App() {
         {
           chatMessages.map((message) => {
             return (
-                <div key={message.id} style={{backgroundColor: "grey", margin: "10px", padding: "10px"}}>
-                  <p style={{color: "white"}}>{message.user.name}</p>
-                  <p style={{color: "white"}}>{message.message}</p>
-                </div>
+              <div key={message.id} style={{ backgroundColor: "grey", margin: "10px", padding: "10px" }}>
+                <p style={{ color: "white" }}>{message.user.name}</p>
+                <p style={{ color: "white" }}>{message.message}</p>
+              </div>
             );
           })
         }
       </div>
       <input value={message} onChange={(event) => {
         setMessage(event.target.value);
-      }}/>
-      <button onClick={() => {sendMessage(message)}}>Send Message</button>
+      }} />
+      <button onClick={() => { sendMessage(message) }}>Send Message</button>
     </div>
   );
 }
