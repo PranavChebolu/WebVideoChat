@@ -31,8 +31,6 @@ function App() {
       // socketId: socket.id
     });
 
-    console.log(socket);
-
     return () => {
       if (socketHandler) {
         socketHandler.close();
@@ -79,7 +77,6 @@ function App() {
         }
       </div>
       <input value={message} onChange={(event) => {
-        console.log(event.target.value);
         setMessage(event.target.value);
       }}/>
       <button onClick={() => {sendMessage(message)}}>Send Message</button>
