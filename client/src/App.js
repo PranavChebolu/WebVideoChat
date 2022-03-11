@@ -52,7 +52,7 @@ function App() {
         console.log('sending message object', messageObj);
 
         // emit message to socket server
-        socketHandler.emit('chat-message', messageObj);
+        socketHandler.emit('chat message', messageObj);
 
         // clear text field after sending message
         setMessage('');
