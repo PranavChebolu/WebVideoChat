@@ -7,6 +7,7 @@ const port = process.env.PORT || 8080;
 
 const app = express();
 const server = http.createServer(app);
+//general socket io server
 const io = new Server(server, {
     cors: {
         origins: "*:*",
@@ -17,6 +18,8 @@ const io = new Server(server, {
     }
 });
 
+//use socket variable when someone connects
+
 // Middlewares
 app.use(cors({
     origin: "*"
@@ -24,8 +27,12 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
 
 app.post("/test", (req, res) => {
     console.log(req.body.hello)
