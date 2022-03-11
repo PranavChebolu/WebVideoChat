@@ -45,6 +45,12 @@ io.on('connection', (socket) => {
     });
 });
 
+io.on('connection', (socket) => {
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg);
+    });
+});
+
 console.log("hello");
 server.listen(8081, () => {
     console.log("server is running")
