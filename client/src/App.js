@@ -27,8 +27,8 @@ function App() {
 
     // listen for chat messages
     socket.on('chat message', (newChatMessage) => {
+      chatMessages.push(newChatMessage);
       const chatMessagesCopy = [...chatMessages];
-      chatMessagesCopy.push(newChatMessage);
       setChatMessages(chatMessagesCopy);
     });
 
