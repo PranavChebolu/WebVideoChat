@@ -32,6 +32,10 @@ app.post("/test", (req, res) => {
     res.send({ "hello": "to you" })
 })
 
+io.on('connection', (socket) => {
+    console.log('a user connected');
+});
+
 console.log("hello");
 server.listen(8081, () => {
     console.log("server is running")
