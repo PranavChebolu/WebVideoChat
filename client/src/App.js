@@ -12,8 +12,7 @@ function App() {
     {
       id: 'someId1',
       user: {
-        name: 'Bob',
-        // socketId: 'someSocketId'
+        name: 'Bob'
       },
       message: 'sampleMessage'
     }
@@ -21,16 +20,27 @@ function App() {
 
   const [user, setUser] = React.useState(undefined);
 
+  // use effect hook - runs once like a constructor
   React.useEffect(() => {
+    // connection to socket server
     const socket = socketIOClient('http://localhost:8081', {secure: false});
 
-    setSocketHandler(socket);
-
-    setUser({
-      name: "Pranav",
-      // socketId: socket.id
+    // listen for chat messages
+    socket.on('chat message', (newChatMessage) => {
+      const chatMessagesCopy = [...chatMessages];
+      chatMessagesCopy.push(newChatMessage);
+      setChatMessages(chatMessagesCopy);
     });
 
+    // set socket handler so we can do things like sending messages in the sendMessage() function
+    setSocketHandler(socket);
+
+    // set the user object
+    setUser({
+      name: "Pranav",
+    });
+
+    // clean up function to close socket connection when this component is removed from screen
     return () => {
       if (socketHandler) {
         socketHandler.close();
@@ -38,17 +48,19 @@ function App() {
     }
   }, []);
 
-  // function to send a message
+  // function to send a message to other clients by emitting a socket message
   const sendMessage = (message) => {
     // prevent empty message from being sent
     if (message || message.trim().length > 0) {
       if (socketHandler) {
+        // define object to send to other clients
         const messageObj = {
           id: uuidV4(),
           user: user,
           message: message
         };
 
+        // print out what we are sending to other clients
         console.log('sending message object', messageObj);
 
         // emit message to socket server
@@ -62,13 +74,14 @@ function App() {
     }
   }
 
+  // html drawn to screen
   return (
     <div>
       <div>
         {
           chatMessages.map((message) => {
             return (
-                <div key={message.id} style={{backgroundColor: "grey", margin: "10px"}}>
+                <div key={message.id} style={{backgroundColor: "grey", margin: "10px", padding: "10px"}}>
                   <p style={{color: "white"}}>{message.user.name}</p>
                   <p style={{color: "white"}}>{message.message}</p>
                 </div>
