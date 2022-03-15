@@ -269,3 +269,7 @@ $RECYCLE.BIN/
 
 # Built Visual Studio Code Extensions
 *.vsix
+/.idea/vcs.xml
+/.idea/WebVideoChat.iml
+/.idea/modules.xml
+/.idea/.gitignore
