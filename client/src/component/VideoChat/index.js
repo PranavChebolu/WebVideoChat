@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import socketIOClient from "socket.io-client";
 import { v4 as uuidV4 } from 'uuid';
 import {useNavigate} from "react-router-dom";
@@ -19,6 +19,9 @@ const VideoChat = (props) => {
 
     // our user
     const [user, setUser] = React.useState(undefined);
+
+    // keep track of whether user sent message they joined
+    const [sentIJoinedMessage, setSentIJoinedMessage] = React.useState(false);
 
     // use effect hook - runs once like a constructor
     React.useEffect(() => {
@@ -53,6 +56,14 @@ const VideoChat = (props) => {
         }
     }, []);
 
+    useEffect(() => {
+        if (socketHandler && !sentIJoinedMessage) {
+            // send message saying you joined
+            sendMessage("I joined");
+            setSentIJoinedMessage(true);
+        }
+    }, [socketHandler]);
+
     // function to send a message to other clients by emitting a socket message
     const sendMessage = (message) => {
         // prevent empty message from being sent
@@ -81,23 +92,39 @@ const VideoChat = (props) => {
 
     // html drawn to screen
     return (
-        <div>
-            <div>
-                {
-                    chatMessages.map((message) => {
-                        return (
-                            <div key={message.id} style={{ backgroundColor: "grey", margin: "10px", padding: "10px" }}>
-                                <p style={{ color: "white" }}>{message.user.name}</p>
-                                <p style={{ color: "white" }}>{message.message}</p>
-                            </div>
-                        );
-                    })
-                }
+        <div style={{display: "flex", flexDirection: "row"}}>
+            {/*Video Panels Box*/}
+            <div style={{flex: 0.7}}>
+                <p>TODO: video panels go here</p>
             </div>
-            <input value={message} onChange={(event) => {
-                setMessage(event.target.value);
-            }} />
-            <button onClick={() => { sendMessage(message) }}>Send Message</button>
+
+            {/*Chat Box*/}
+            <div style={{flex: 0.3, display: "flex", flexDirection: "column", height: "100vh", maxHeight: "100vh", backgroundColor: "rgb(204,204,204)"}}>
+                <div style={{flexGrow: 1, display: "flex", flexDirection: "column", overflowY: "scroll"}}>
+                    <h2>Chat</h2>
+                    {
+                        chatMessages.map((message) => {
+                            return (
+                                <div key={message.id} style={{ backgroundColor: "grey", margin: "10px", padding: "10px" }}>
+                                    <p style={{ color: "white" }}>{message.user.name}</p>
+                                    <p style={{ color: "white" }}>{message.message}</p>
+                                </div>
+                            );
+                        })
+                    }
+                </div>
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <form style={{display: "flex", flexDirection: "row", width: "100%"}} onSubmit={(event) => {
+                        event.preventDefault();
+                        sendMessage(message);
+                    }}>
+                        <input style={{flexGrow: 1}} placeholder={"message"} value={message} onChange={(event) => {
+                            setMessage(event.target.value);
+                        }} />
+                        <button type={"submit"}>Send Message</button>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 }
